@@ -48,7 +48,7 @@ def hostile_portal():
 
     try:
         utils.Iptables.save_rules()
-    
+
         # start autocrack if enabled
         if use_autocrack:
 
@@ -87,7 +87,7 @@ def hostile_portal():
         hostapd = HostapdEaphammer(settings, options)
         hostapd.start()
 
-        # configure routing 
+        # configure routing
         interface.set_ip_and_netmask('10.0.0.1', '255.255.255.0')
         os.system('route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1')
 
@@ -174,7 +174,7 @@ def hostile_portal():
     except KeyboardInterrupt:
 
         resp.stop()
-    
+
         hostapd.stop()
         services.Dnsmasq.kill()
         rs.stop()
@@ -201,7 +201,7 @@ def hostile_portal():
 
             # remove acl file from tmp directory
             hostapd_ssid_acl.remove()
-        
+
         # restore iptables to a clean state (policy, flush tables)
         utils.Iptables.accept_all()
         utils.Iptables.flush()
@@ -264,7 +264,7 @@ def captive_portal():
         hostapd = HostapdEaphammer(settings, options)
         hostapd.start()
 
-        # configure routing 
+        # configure routing
         interface.set_ip_and_netmask('10.0.0.1', '255.255.255.0')
         os.system('route add -net 10.0.0.0 netmask 255.255.255.0 gw 10.0.0.1')
 
@@ -283,7 +283,7 @@ def captive_portal():
         # use iptables to redirect all DNS and HTTP(S) traffic to PHY
         utils.Iptables.route_dns2_addr('10.0.0.1', interface)
         utils.Iptables.route_http2_addr('10.0.0.1', interface)
-        
+
         # pause execution until user quits
         input('\n\nPress enter to quit...\n\n')
 
@@ -315,7 +315,7 @@ def captive_portal():
 
         if options['known_beacons']:
             known_ssids_file.remove()
-        
+
         # restore iptables to a clean state (policy, flush tables)
         utils.Iptables.accept_all()
         utils.Iptables.flush()
@@ -356,7 +356,7 @@ def captive_portal():
 
         if options['known_beacons']:
             known_ssids_file.remove()
-        
+
         # restore iptables to a clean state (policy, flush tables)
         utils.Iptables.accept_all()
         utils.Iptables.flush()
@@ -405,7 +405,7 @@ def troll_defender():
         hostapd = HostapdEaphammer(settings, options)
         hostapd.start()
 
-        # pause execution until user quits  
+        # pause execution until user quits
         input('\n\nPress enter to quit...\n\n')
 
         hostapd.stop()
@@ -496,7 +496,7 @@ def reap_creds():
         hostapd = HostapdEaphammer(settings, options)
         hostapd.start()
 
-        # pause execution until user quits  
+        # pause execution until user quits
         input('\n\nPress enter to quit...\n\n')
 
         hostapd.stop()
@@ -598,12 +598,12 @@ def pmkid_attack():
                 sys.exit()
             print('[*] Channel %d selected...' % channel)
             print('[*] Complete!')
-        
+
         essid = iw_parse.helper_functions.find_essid_from_bssid(bssid, networks)
         if essid is None:
             print('[!] Target network is hidden...')
             essid = ''
-    
+
     elif essid is not None:
 
         print('[*] No bssid or channel specified...')
@@ -619,7 +619,7 @@ def pmkid_attack():
             sys.exit()
         print('[*] Channel %d selected...' % channel)
         print('[*] Complete!')
-    
+
     else:
         raise Exception('BSSID or ESSID must be specified')
 
@@ -631,7 +631,7 @@ def pmkid_attack():
     print('[*] Running hcxdumptool...')
     p = subprocess.Popen('%s -i %s -c %d -o %s --filtermode=2 --filterlist=%s --enable_status=3' % (hcxdumptool, interface, channel, hcxdumptool_ofile, hcxdumptool_filter), shell=True, stdout=subprocess.PIPE, preexec_fn=os.setsid)
     while True:
-        line = p.stdout.readline()
+        line = p.stdout.readline().decode("utf-8")
         print(line, end=' ')
         if 'FOUND PMKID CLIENT-LESS]' in line:
             break
@@ -651,7 +651,7 @@ def pmkid_attack():
             datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S'),
             'PMKID.txt',
     ]))
-    
+
     print('[*] Saving hash to %s' % save_file)
     with open(save_file, 'w') as fd:
         fd.write(hash_str)
@@ -711,7 +711,7 @@ def save_config_only():
 def run_cert_wizard():
 
     if options['cert_wizard'] == 'import':
-       
+
         cert_wizard.import_cert(options['server_cert'],
                     private_key_path=options['private_key'],
                     ca_cert_path=options['ca_cert'],
@@ -721,7 +721,7 @@ def run_cert_wizard():
     elif options['cert_wizard'] == 'create' or options['bootstrap']:
 
         if options['self_signed'] or options['bootstrap']:
-            
+
             cert_wizard.bootstrap(options['cn'],
                                 country=options['country'],
                                 state_province=options['state'],
@@ -768,7 +768,7 @@ def run_cert_wizard():
     else:
 
         raise Exception('Invalid argument passed to --cert-wizard')
-            
+
 def am_i_rooot():
 
     print('[?] Am I root?')
@@ -786,12 +786,12 @@ def print_banner():
 
 
     print('''
-                     .__                                         
-  ____ _____  ______ |  |__ _____    _____   _____   ___________ 
+                     .__
+  ____ _____  ______ |  |__ _____    _____   _____   ___________
 _/ __ \\\\__  \\ \\____ \\|  |  \\\\__  \\  /     \\ /     \\_/ __ \\_  __ \\
 \\  ___/ / __ \\|  |_> >   Y  \\/ __ \\|  Y Y  \\  Y Y  \\  ___/|  | \\/
- \\___  >____  /   __/|___|  (____  /__|_|  /__|_|  /\\___  >__|   
-     \\/     \\/|__|        \\/     \\/      \\/      \\/     \\/       
+ \\___  >____  /   __/|___|  (____  /__|_|  /__|_|  /\\___  >__|
+     \\/     \\/|__|        \\/     \\/      \\/      \\/     \\/
 
 
                         %s
@@ -820,7 +820,7 @@ if __name__ == '__main__':
     if options['cert_wizard'] or options['bootstrap']:
         run_cert_wizard()
     elif options['save_config_only']:
-        save_config_only()        
+        save_config_only()
     elif options['captive_portal']:
         captive_portal()
     elif options['hostile_portal']:

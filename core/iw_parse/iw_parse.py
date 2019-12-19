@@ -267,7 +267,7 @@ def call_iwlist(interface='wlan0'):
     """
     p = subprocess.Popen(['iwlist', interface, 'scanning'],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return p.stdout.read()
+    return p.stdout.read().decode("utf-8")
 
 def get_interfaces(interface="wlan0"):
     """ Get parsed iwlist output
