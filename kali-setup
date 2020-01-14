@@ -8,7 +8,7 @@ def read_deps_file(deps_file):
         return ' '.join([ line.strip() for line in fd ])
 
 if __name__ == '__main__':
-                    
+
 
     default_wordlist = os.path.join(settings.dict['paths']['directories']['wordlists'], settings.dict['core']['eaphammer']['general']['default_wordlist'])
 
@@ -49,9 +49,9 @@ if __name__ == '__main__':
     print('\n[*] complete!\n')
 
     print('\n[*] Installing Python dependencies...\n')
-    os.system('python3 -m pip install -r pip.req')
+    os.system('python3 -m pip install -r pip.req --no-cache-dir')
     print('\n[*] complete!\n')
-    
+
 
     print('\n[*] Downloading OpenSSL_{}...\n'.format(openssl_version.replace('.', '_')))
     os.system('wget {} -O {}/openssl.tar.gz'.format(openssl_source, local_dir))
@@ -94,7 +94,6 @@ if __name__ == '__main__':
     os.system("cd %s && tar xzf %s.tar.gz" % (settings.dict['paths']['directories']['wordlists'], default_wordlist))
     print('\n[*] complete!\n')
 
-    print('\n[*] Retrieving Responder from teh interwebz...\n')
+    print('\n[*] Retrieving Responder from the interwebz...\n')
     os.system("cd %s && git clone https://github.com/lgandx/Responder.git" % (settings.dict['paths']['directories']['local']))
     print('\n[*] complete!\n')
-
